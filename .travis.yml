@@ -7,6 +7,8 @@ addons:
       - libssl-dev
       - gfortran
       - libopenblas-dev
+      - liblapack-dev
+      - strace
 cache: cargo
 env:
   global: RUSTFLAGS='-D warnings'
@@ -23,9 +25,9 @@ matrix:
       - cargo fmt --all -- --check
   - name: Coverage
     before_script:
-      - cargo install cargo-tarpaulin
+      - cargo install cargo-tarpaulin && cargo clean
     script:
-      - cargo tarpaulin -v --all --run-types Tests Doctests --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
+      - strace cargo tarpaulin -v --run-types Tests Doctests --ciserver travis-ci --coveralls $TRAVIS_JOB_ID linfa-clustering
   allow_failures:
     - rust: nightly
   fast_finish: true

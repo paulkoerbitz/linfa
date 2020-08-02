@@ -14,20 +14,20 @@ env:
   global: RUSTFLAGS='-D warnings'
 matrix:
   include:
-  - rust: 1.38.0 # Minimum Supported Rust Version
-  - rust: stable
-  - rust: beta
-  - rust: nightly
-  - name: Linting (fmt)
-    before_script:
-      - rustup component add rustfmt
-    script:
-      - cargo fmt --all -- --check
+  # - rust: 1.38.0 # Minimum Supported Rust Version
+  # - rust: stable
+  # - rust: beta
+  # - rust: nightly
+  # - name: Linting (fmt)
+  #   before_script:
+  #     - rustup component add rustfmt
+  #   script:
+  #     - cargo fmt --all -- --check
   - name: Coverage
     before_script:
       - cargo install cargo-tarpaulin && cargo clean
     script:
-      - strace cargo tarpaulin -v --run-types Tests Doctests --ciserver travis-ci --coveralls $TRAVIS_JOB_ID linfa-clustering
+      - cd linfa-clustering && strace cargo tarpaulin --all -v --run-types Tests Doctests --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
   allow_failures:
     - rust: nightly
   fast_finish: true
